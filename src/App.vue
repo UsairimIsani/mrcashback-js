@@ -1,32 +1,36 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+  <div style="height:100%;">
+    <div style="height:10vh;">
+      <vs-navbar style="height:100%;">
+        <div slot="title">
+          <vs-navbar-title>Hello world</vs-navbar-title>
+        </div>
+
+        <vs-navbar-item index="0">
+          <a href="#">Home</a>
+        </vs-navbar-item>
+        <vs-navbar-item index="1">
+          <a href="#">News</a>
+        </vs-navbar-item>
+        <vs-navbar-item index="2">
+          <a href="#">Update</a>
+        </vs-navbar-item>
+      </vs-navbar>
     </div>
-    <router-view/>
+    <vs-row vs-type="flex" vs-align="center" vs-justify="center">
+      <vs-col vs-type="flex">
+        <router-view></router-view>
+      </vs-col>
+    </vs-row>
   </div>
 </template>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+html,
+body {
+  height: 100%;
 }
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+.column {
+  flex-direction: column;
 }
 </style>
