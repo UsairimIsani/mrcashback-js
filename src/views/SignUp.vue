@@ -1,39 +1,31 @@
 <template >
   <vs-row vs-type="flex" vs-justify="center" vs-align="center">
-    <vs-col vs-type="flex" vs-justify="flex-start" vs-align="center">
+    <vs-col vs-type="flex" vs-justify="flex-start" vs-align="center" class="form-container">
       <vs-input
-        :vs-valid.sync="valid.email"
-        class="full-width"
-        vs-success-text="Email"
-        vs-danger-text="You've typed a wrong email format."
-        vs-type="email"
-        vs-label-placeholder="Email"
+        size="large"
+        success-text="Email"
+        danger-text="You've typed a wrong email format."
+        type="email"
+        label-placeholder="Email"
         v-model="email"
       />
       <vs-input
-        :vs-valid.sync="valid.password"
-        class="full-width"
-        vs-success-text="Password "
-        vs-danger-text="Password Should Contain Numbers, Letter and Characters"
-        vs-type="password"
-        vs-label-placeholder="Password"
+        size="large"
+        success-text="Password "
+        danger-text="Password Should Contain Numbers, Letter and Characters"
+        type="password"
+        label-placeholder="Password"
         v-model="password"
       />
       <vs-input
-        :vs-valid.sync="valid.rePassword"
-        class="full-width"
-        vs-success-text="Password "
-        vs-danger-text="Password Should Contain Numbers, Letter and Characters"
-        vs-type="password"
-        vs-label-placeholder="Retype Your Password"
+        size="large"
+        success-text="Password "
+        danger-text="Password Should Contain Numbers, Letter and Characters"
+        type="password"
+        label-placeholder="Retype Your Password"
         v-model="rePassword"
       />
-      <vs-checkbox vs-color="success" v-model="signIn" class="remeber-me">Sign Me In</vs-checkbox>
-      <vs-row vs-type="flex" vs-justify="space-evenly" vs-align="center" vs-w="12">
-        <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="12">
-          <vs-button vs-type="success-filled" class="full-width" @click="register">Register</vs-button>
-        </vs-col>
-      </vs-row>
+      <vs-button vs-type="success-filled" class="submit" @click="register">Register</vs-button>
       <div class="link">
         <router-link to="/login">Already a member.Log In.</router-link>
       </div>
@@ -50,11 +42,6 @@ export default {
       password: "",
       rePassword: "",
       signIn: false,
-      valid: {
-        email: false,
-        password: false,
-        rePassword: false,
-      },
     };
   },
   methods: {
@@ -84,8 +71,22 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.padding-5 {
-  padding: 5%;
+.form-container {
+  flex-direction: column;
+  div {
+    padding: 1em;
+    width: 100%;
+  }
+  .submit {
+    min-width: 200px;
+    max-width: 500px;
+    width: auto;
+  }
+}
+.vs-input {
+  min-width: 200px;
+  max-width: 500px;
+  width: auto;
 }
 .remeber-me {
   align-self: flex-start;

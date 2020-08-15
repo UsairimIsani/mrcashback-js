@@ -1,32 +1,26 @@
 <template >
   <vs-row vs-type="flex" vs-justify="center" vs-align="center">
-    <vs-col vs-type="flex" vs-justify="flex-start">
-      <h1>MRCASHBACK</h1>
+    <vs-col vs-type="flex" vs-justify="flex-start" vs-align="center" class="form-container">
       <vs-input
-        :vs-valid.sync="valid.email"
-        class="full-width"
-        vs-success-text="Email"
-        vs-danger-text="You've typed a wrong email format."
-        vs-type="email"
-        vs-label-placeholder="Email"
+        size="large"
+        success-text="Email"
+        danger-text="You've typed a wrong email format."
+        type="email"
+        label-placeholder="Email"
         v-model="email"
       />
 
       <vs-input
-        :vs-valid.sync="valid.password"
-        class="full-width"
-        vs-success-text="Password "
-        vs-danger-text="Password Should Contain Numbers, Letter and Characters"
-        vs-type="password"
-        vs-label-placeholder="Password"
+        size="large"
+        success-text="Password"
+        danger-text="Password Should Contain Numbers, Letter and Characters"
+        type="password"
+        label="Password"
+        label-placeholder="Password"
         v-model="password"
       />
-      <vs-checkbox vs-color="success" v-model="rememberMe" class="remeber-me">Remember Me</vs-checkbox>
-      <vs-row vs-type="flex" vs-justify="space-evenly" vs-align="center" vs-w="12">
-        <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="12">
-          <vs-button vs-type="success-filled" class="full-width" @click="login">Login</vs-button>
-        </vs-col>
-      </vs-row>
+      <vs-checkbox vs-value="success" v-model="rememberMe">Remember Me</vs-checkbox>
+      <vs-button size="large" vs-type="success-filled" class="submit" @click="login">Login</vs-button>
       <div class="link">
         <router-link to="/signup">Register As a New User.</router-link>
       </div>
