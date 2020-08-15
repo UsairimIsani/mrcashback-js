@@ -1,9 +1,12 @@
 <template>
-  <div>
+  <div class="camera-container">
     <div class="video-container" @click="takePicture">
       <video :src-object.prop.camel="videoSrc" autoplay></video>
     </div>
-    <img :src="imageSrc" alt />
+    <div>
+      <img v-if="imageSrc" :src="imageSrc" alt />
+      <img v-else height="480px" width="640px" src="@/assets/no-image.svg" />
+    </div>
   </div>
 </template>
 <script>
@@ -21,7 +24,6 @@ export default {
       })
       .then((e) => {
         this.videoSrc = e;
-        console.log(e.getVideoTracks()[0]);
       });
   },
   methods: {
@@ -43,6 +45,13 @@ button {
   background: none;
   width: 48px;
   height: 48px;
+}
+.camera-container {
+  display: flex;
+  justify-content: space-around;
+  & div {
+    margin: 1em;
+  }
 }
 .video-container {
   position: relative;

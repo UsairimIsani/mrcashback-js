@@ -1,6 +1,7 @@
 <template>
   <div>
     <Camera></Camera>
+    <vs-divider position="left" color="success">Gallery</vs-divider>
     <Gallery></Gallery>
   </div>
 </template>
