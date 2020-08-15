@@ -1,4 +1,7 @@
 <template>
+  <!-- Image view -->
+  <!-- Views Image of Specific ID -->
+  <!-- For All images use Gallery -->
   <div></div>
 </template>
 <script>
@@ -7,7 +10,7 @@ export default {
     return {};
   },
   mounted() {
-    // this.$route.params.id;
+    // * this.$route.params.id;
   },
 };
 </script>

@@ -1,4 +1,5 @@
 <template>
+  <!-- Table View of All Users with their Images -->
   <vs-table :data="users">
     <template slot="header">
       <h3>Users</h3>
@@ -7,15 +8,16 @@
       <vs-th>Name</vs-th>
       <vs-th>No of Images</vs-th>
     </template>
-
+    <!-- List all User -->
     <template slot-scope="{data}">
       <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
         <vs-td :data="tr.username">
           <h3>{{tr.name}}</h3>
         </vs-td>
         <vs-td :data="tr.images.length">{{tr.images.length}}</vs-td>
-
+        <!-- Expands to show User Images -->
         <template slot="expand">
+          <!-- Show User's Images -->
           <Gallery></Gallery>
         </template>
       </vs-tr>
@@ -27,6 +29,7 @@ import Gallery from "@/components/Gallery.vue";
 export default {
   data() {
     return {
+      // Mock Users
       users: [
         {
           username: "UsairimIsani",

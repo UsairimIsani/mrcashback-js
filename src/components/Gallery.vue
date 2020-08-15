@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- Picture Gallery -->
     <vs-images v-if="images">
       <vs-image
         class="images"
@@ -9,6 +10,7 @@
         @click.native="openImage(image)"
       />
     </vs-images>
+    <!-- Placeholder Image. In case of no Images -->
     <img v-else height="480px" width="640px" src="@/assets/no-image.svg" />
   </div>
 </template>
@@ -16,23 +18,27 @@
 export default {
   data() {
     return {
-      images: null,
+      images: null, // *  List of images
     };
   },
   methods: {
+    // * Opens image of specific ID in Images View
     openImage(e) {
       this.$router.push(`img/${e.id}`);
     },
   },
   mounted() {
-    // Testing async behaviour
+    // * Placeholder Images to test Async Behaviour
     setTimeout(() => {
+      // * Create a new Array of length 10
+      // * Map each element of empty array to image with metadata.
       this.images = Array.from(new Array(10)).map((_, index) => {
         return {
           url: `https://picsum.photos/400/400?image=2${index}`,
           id: index,
         };
       });
+      // * Timeout to Simulate Async Behaviour
     }, 0);
   },
 };

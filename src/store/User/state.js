@@ -1,6 +1,7 @@
+// * User State
 export default {
   user: {
-    username: "",
+    email: "",
     token: "",
     verified: false,
     admin: false

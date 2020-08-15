@@ -36,7 +36,7 @@ export default {
     return {
       email: "",
       password: "",
-      rememberMe: false,
+      rememberMe: false, // TODO : Stay Signed In after Login
       valid: {
         email: false,
         password: false,
@@ -44,12 +44,19 @@ export default {
     };
   },
   methods: {
+    // Map Action to Props
     ...mapActions([ACTIONS.LOGIN]),
     login() {
+      // Regex to test valid Email Address
       const re = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+
+      // TODO : Do Real Form Validations
+      // * Naive Impl of Form Validation
+      // ! Does not! Sanitize input.
       if (
         re.test(String(this.email).toLowerCase()) &&
-        this.password.toString().length > 0
+        this.password.toString().length > 7 &&
+        this.password.toString().length < 20
       ) {
         const user = {
           email: this.email,

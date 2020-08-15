@@ -45,12 +45,16 @@ export default {
     };
   },
   methods: {
+    // Map Actions to Props
     ...mapActions([ACTIONS.REGISTER]),
     register() {
+      // Regex to test valid email
       const re = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
       if (
         re.test(String(this.email).toLowerCase()) &&
-        this.password.toString() === this.rePassword.toString()
+        this.password.toString() === this.rePassword.toString() &&
+        this.password.length > 7 &&
+        this.password.length < 20
       ) {
         const user = {
           email: this.email,

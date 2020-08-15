@@ -5,6 +5,7 @@ import { auth } from "@/utils";
 Vue.use(VueRouter);
 
 const routes = [
+  // * Redirect to Login Page
   {
     path: "/",
     redirect: "/login"
@@ -33,7 +34,7 @@ const routes = [
     path: "/admin/id",
     meta: {
       requiresAuth: true
-      // requiresAdmin: true
+      // * requiresAdmin: true
     },
     component: () => import("../views/Admin.vue")
   },
@@ -43,8 +44,8 @@ const routes = [
     component: () => import("../components/ImageDetails.vue")
   },
   {
-    path: "*",
-    redirect: "/"
+    path: "*", // * For any other route redirect to Login Page
+    redirect: "/login"
   }
 ];
 
@@ -54,15 +55,16 @@ const router = new VueRouter({
 });
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    // this route requires auth, check if logged in
-    // if not, redirect to login page.
+    // * this route requires auth,
+    // * check if logged in redirect to dashboard
+    // * if not, redirect to login page.
     if (!auth.isLoggedIn()) {
       next({
         path: "/login",
         query: { redirect: to.fullPath }
       });
     } else {
-      next();
+      next("/dashboard");
     }
   } else {
     next();
