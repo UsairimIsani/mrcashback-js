@@ -64,7 +64,7 @@ router.beforeEach((to, from, next) => {
         query: { redirect: to.fullPath }
       });
     } else {
-      next("/dashboard");
+      next();
     }
   } else {
     next();

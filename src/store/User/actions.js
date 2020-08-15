@@ -4,32 +4,42 @@ import router from "../../router";
 import vue from "../../main";
 export default {
   // * Login User with Email and Password
+
   [ACTIONS.LOGIN](ctx, payload) {
     client
       .post(`user/login`, payload.user)
       .then(user => {
         // * Update the User State with logged in User.
+
         ctx.commit(ACTIONS.LOGIN, user);
+
         // * Notification of Successful SignIn
+
         vue.$vs.notify({
           title: "Success",
           text: "You have Successfully Logged In.",
           color: "success",
           position: "top-right"
         });
+
         // * Redirect to Dashboard.
+
         vue.$router.push("/dashboard");
       })
       .catch(err => {
         // * Login Failed.
+
         ctx.commit(ACTIONS.LOGIN_FAILED, err);
+
         // * Notification for Login Failure
+
         vue.$vs.notify({
           title: "Login Failure",
           text: err.message,
           color: "danger",
           position: "top-right"
         });
+
         // * Redirect to Register on Login Failure.
         // * Non exhaustive Error Handling : TODO Exhaustive Error Handling
         // TODO : Cases
@@ -37,6 +47,7 @@ export default {
         // TODO : Network Error
         // TODO : Non existent User.
         // TODO : More Unknown Cases
+
         vue.$router.push("/register");
       });
   },
