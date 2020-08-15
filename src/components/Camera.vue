@@ -26,6 +26,11 @@ export default {
         this.videoSrc = e;
       });
   },
+  destroyed() {
+    this.videoSrc.getVideoTracks().forEach((e) => {
+      e.stop();
+    });
+  },
   methods: {
     takePicture(e) {
       new ImageCapture(this.videoSrc.getVideoTracks()[0])
