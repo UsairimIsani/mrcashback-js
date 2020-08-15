@@ -6,17 +6,15 @@ export default {
   [ACTIONS.LOGIN](ctx, payload) {
     client
       .post(`user/login`, payload.user)
-      .then(userData => {
-        ctx.commit(ACTIONS.LOGIN, {
-          userData,
-          rememberMe: payload.rememberMe
-        });
+      .then(user => {
+        ctx.commit(ACTIONS.LOGIN, user);
         vue.$vs.notify({
           title: "Success",
           text: "You have Successfully Logged In.",
           color: "success",
           position: "top-right"
         });
+        vue.$router.push("/dashboard");
       })
       .catch(err => {
         ctx.commit(ACTIONS.LOGIN_ERR, err);
@@ -31,8 +29,8 @@ export default {
   [ACTIONS.REGISTER](ctx, payload) {
     client
       .post(`user/register?signin=${payload.user.signIn}`, payload.user)
-      .then(userData => {
-        ctx.commit(ACTIONS.REGISTER, userData);
+      .then(user => {
+        ctx.commit(ACTIONS.REGISTER, user);
       })
       .catch(() => {
         router.push("/login");
@@ -44,15 +42,11 @@ export default {
   [ACTIONS.VERIFY_ME](ctx) {
     client
       .get(`user/me`)
-      .then(res => {
-        res
-          .json()
-          .then(userData => {
-            ctx.commit(ACTIONS.VERIFY_ME, userData);
-          })
-          .catch(() => {
-            router.push("/login");
-          });
+      .then(user => {
+        ctx.commit(ACTIONS.VERIFY_ME, user);
+      })
+      .catch(() => {
+        router.push("/login");
       })
       .catch(err => {
         ctx.commit(ACTIONS.VERIFY_ME, err);
