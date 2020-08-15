@@ -1,23 +1,21 @@
 import ACTIONS from "../ACTION_CONSTANTS";
-import client from "../../utils";
+import { client } from "../../utils";
 import router from "../../router";
 import vue from "../../main";
 export default {
   [ACTIONS.LOGIN](ctx, payload) {
     client
       .post(`user/login`, payload.user)
-      .then(res => {
-        res.json().then(userData => {
-          ctx.commit(ACTIONS.LOGIN, {
-            userData,
-            rememberMe: payload.rememberMe
-          });
-          vue.$vs.notify({
-            title: "Success",
-            text: "You have Successfully Logged In.",
-            color: "success",
-            position: "top-right"
-          });
+      .then(userData => {
+        ctx.commit(ACTIONS.LOGIN, {
+          userData,
+          rememberMe: payload.rememberMe
+        });
+        vue.$vs.notify({
+          title: "Success",
+          text: "You have Successfully Logged In.",
+          color: "success",
+          position: "top-right"
         });
       })
       .catch(err => {
@@ -32,16 +30,12 @@ export default {
   },
   [ACTIONS.REGISTER](ctx, payload) {
     client
-      .post(`user/register?signin=${payload.signIn}`, payload.user)
-      .then(res => {
-        res
-          .json()
-          .then(userData => {
-            ctx.commit(ACTIONS.REGISTER, userData);
-          })
-          .catch(() => {
-            router.push("/login");
-          });
+      .post(`user/register?signin=${payload.user.signIn}`, payload.user)
+      .then(userData => {
+        ctx.commit(ACTIONS.REGISTER, userData);
+      })
+      .catch(() => {
+        router.push("/login");
       })
       .catch(err => {
         ctx.commit(ACTIONS.REGISTER_ERR, err);

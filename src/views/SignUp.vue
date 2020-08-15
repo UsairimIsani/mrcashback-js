@@ -47,20 +47,22 @@ export default {
   methods: {
     ...mapActions([ACTIONS.REGISTER]),
     register() {
+      const re = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
       if (
-        this.valid.email &&
-        this.valid.password &&
-        this.valid.rePassword &&
+        re.test(String(this.email).toLowerCase()) &&
         this.password.toString() === this.rePassword.toString()
       ) {
         const user = {
-          username: this.email,
+          email: this.email,
           password: this.password,
+          admin: false,
+          verified: true,
+          token: "",
+          signIn: this.signIn,
         };
 
-        this[ACTIONS.REGISTER]({
+        this.REGISTER({
           user,
-          signIn: this.signIn,
         });
         this.email = "";
         this.password = "";
