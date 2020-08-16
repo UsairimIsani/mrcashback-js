@@ -30,6 +30,10 @@ export default {
   [ACTION_CONSTANTS.UPDATE_USER_FAILED](state, payload) {
     state.err = true;
     state.errObj = payload;
+  },
+  [ACTION_CONSTANTS.LOGOUT](state, payload) {
+    state.user = {};
+    state.verified = false;
   }
   // * Authenticate User Session
   // [ACTION_CONSTANTS.VERIFY_ME](state, payload) {

@@ -17,10 +17,17 @@
             to="/dashboard"
           >Dashboard</router-link>
         </vs-navbar-item>
+        <vs-navbar-item index="0">
+          <router-link
+            class="home-link"
+            v-if="$route.path !=='/login'&& $route.path !=='/signup' && auth.isAdmin()"
+            to="/admin"
+          >Admin</router-link>
+        </vs-navbar-item>
         <vs-navbar-item index="2">
-          <router-link to="/login" v-if="$route.path !=='/login'&& $route.path !=='/signup'">
+          <a v-if="$route.path !=='/login'&& $route.path !=='/signup'" @click="logout">
             <vs-icon icon="exit_to_app"></vs-icon>
-          </router-link>
+          </a>
         </vs-navbar-item>
       </vs-navbar>
     </div>
@@ -32,11 +39,21 @@
   </div>
 </template>
 <script>
+import { auth } from "./utils";
+import { mapActions } from "vuex";
+import ACTION_CONSTANTS from "./store/ACTION_CONSTANTS";
 export default {
   data() {
     return {
       title: "",
+      auth,
     };
+  },
+  methods: {
+    ...mapActions([ACTION_CONSTANTS.LOGOUT]),
+    logout() {
+      this[ACTION_CONSTANTS.LOGOUT]();
+    },
   },
 };
 </script>
@@ -93,5 +110,11 @@ body {
   max-width: 500px;
   min-height: 200px;
   height: auto;
+}
+.home-link {
+  font-weight: 500;
+}
+.vs-navbar--item a {
+  cursor: pointer;
 }
 </style>

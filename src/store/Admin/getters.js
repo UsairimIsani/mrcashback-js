@@ -1,7 +1,6 @@
 export default {
   adminImages(state) {
-    console.log("GETTER", state);
-    if (state?.images?.length > 0) {
+    if (state.images.length) {
       return (
         state.images.map(img => {
           return { ...img, url: URL.createObjectURL(img.blob) };

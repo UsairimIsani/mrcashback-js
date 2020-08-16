@@ -10,7 +10,10 @@ import "vuesax/dist/vuesax.css";
 import "material-icons/iconfont/material-icons.css";
 Vue.use(Vuesax);
 Vue.config.productionTip = false;
-
+// Clear Local Storage
+window.onbeforeunload = function(e) {
+  localStorage.clear();
+};
 export default new Vue({
   router,
   store,

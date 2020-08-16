@@ -17,7 +17,7 @@
               <vs-td :data="tr.email">
                 <h3>{{tr.email}}</h3>
               </vs-td>
-              <vs-td :data="tr.images.length">{{tr.images.length}}</vs-td>
+              <vs-td v-if="tr.images" :data="tr.images.length">{{tr.images.length}}</vs-td>
               <!-- Expands to show User Images -->
               <template slot="expand">
                 <!-- Show User's Images -->

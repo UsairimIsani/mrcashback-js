@@ -1,4 +1,9 @@
 import { openDB } from "idb";
+// Login Auth guard key for LocalStorage
+const login = "loggedIn";
+
+// Admin Auth guard key for LocalStorage
+const admin = "isAdmin";
 
 // Database Name
 const dbName = "mrcashback";
@@ -79,7 +84,6 @@ async function getDB() {
 export const client = {
   async get(url) {
     // API for Verify Me
-    console.log("GET", url);
 
     if (url === `user/me`) {
     } else if (url.includes(`imgs`)) {
@@ -160,8 +164,6 @@ export const client = {
   async post(url, payload) {
     // API POST
 
-    console.log("POST", url, payload);
-
     // API for User Registration
 
     if (url === `user/register?signin=${payload.signIn}`) {
@@ -178,9 +180,29 @@ export const client = {
 
       const db = getDB();
 
-      // TODO:  Verify Login Password
-
-      return (await db).getFromIndex(userStoreName, emailIndex, payload.email);
+      const user = await (await db).getFromIndex(
+        userStoreName,
+        emailIndex,
+        payload.email
+      );
+      return new Promise((resolve, reject) => {
+        if (user.password === payload.password) {
+          delete user.password;
+          localStorage.setItem(login, true);
+          if (user.admin) {
+            localStorage.setItem(admin, true);
+          } else {
+            localStorage.setItem(admin, false);
+          }
+          resolve(user);
+        } else {
+          reject(
+            new Error({
+              message: "Unauthorized"
+            })
+          );
+        }
+      });
 
       // END
     } else if (url === "img") {
@@ -213,10 +235,6 @@ export const client = {
       // END
     }
 
-    // TODO : API for Images
-    // TODO : POST to DB.
-    // TODO : GET from DB
-    // TODO : GET ALL
     // TODO : Update via User
     // TODO : Update via Admin
   },
@@ -226,6 +244,9 @@ export const client = {
       const db = getDB();
       return (await db).delete(imgStore, parseInt(url[1]));
     }
+  },
+  logout() {
+    localStorage.clear();
   }
 };
 // IIFE to add Mock Admin User
@@ -257,10 +278,10 @@ export const client = {
 // TODO : Implement Real Auth Guard
 export const auth = {
   isLoggedIn() {
-    return true;
+    return JSON.parse(localStorage.getItem(login));
   },
   isAdmin() {
-    return true;
+    return JSON.parse(localStorage.getItem(admin));
   }
 };
 

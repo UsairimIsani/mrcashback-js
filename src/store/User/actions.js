@@ -106,5 +106,10 @@ export default {
       .catch(err => {
         ctx.commit(ACTION_CONSTANTS.UPDATE_USER_FAILED, err);
       });
+  },
+  [ACTION_CONSTANTS.LOGOUT](ctx, payload) {
+    client.logout();
+    ctx.commit(ACTION_CONSTANTS.LOGOUT, payload);
+    vue.$router.push("/login");
   }
 };

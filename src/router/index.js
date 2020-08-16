@@ -39,10 +39,21 @@ const routes = [
     path: "/admin",
     name: "Admin",
     meta: {
-      requiresAuth: true
-      // * requiresAdmin: true
+      requiresAuth: true,
+      requiresAdmin: true
     },
-    component: () => import("../views/Admin.vue")
+    component: () => import("../views/Admin.vue"),
+    beforeEnter: (to, from, next) => {
+      // * this route requires Auth and Admin,
+      if (!auth.isAdmin() && !auth.isLoggedIn) {
+        next({
+          path: "/login",
+          query: { redirect: to.fullPath }
+        });
+      } else {
+        next();
+      }
+    }
   },
   {
     path: "*", // * For any other route redirect to Login Page
@@ -57,8 +68,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     // * this route requires auth,
-    // * check if logged in redirect to dashboard
-    // * if not, redirect to login page.
+    // * check if not logged in redirect to login
     if (!auth.isLoggedIn()) {
       next({
         path: "/login",
