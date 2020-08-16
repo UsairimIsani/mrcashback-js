@@ -53,3 +53,11 @@ npm run cordova-build-android
 ### Customize configuration
 
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Signed APK with
+
+```bash
+keytool -genkey -v -keystore mrcashback.keystore -alias mrcashback -keyalg RSA -keysize 2048 -validity 10000
+ jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore mrcashback.keystore app-release-unsigned.apk mrcashback
+ ~/Android/Sdk/build-tools/30.0.2/zipalign -v 30 app-release-unsigned.apk mrcashback.apk
+```

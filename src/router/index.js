@@ -62,8 +62,8 @@ const routes = [
 ];
 
 const router = new VueRouter({
-  routes,
-  mode: "history"
+  routes
+  // mode: "history"
 });
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
