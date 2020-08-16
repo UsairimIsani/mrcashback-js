@@ -15,6 +15,8 @@ const imgStore = "imageStore";
 // DB index, Makes searchable by email.
 const emailIndex = "email";
 
+// DB index for Images
+const imgIndex = "id";
 // Create a DB and Return a Connection to the DB.
 async function getDB() {
   // dbVersion opens the version specified
@@ -42,12 +44,13 @@ async function getDB() {
 
       userStore.createIndex(emailIndex, emailIndex);
 
-      db.createObjectStore(imgStore, {
+      const imageStore = db.createObjectStore(imgStore, {
         // Use ID as key for DB
         keyPath: "id",
         // Auto increments id.
         autoIncrement: true
       });
+      imageStore.createIndex(imgIndex, imgIndex);
     },
     blocked() {
       // Called if the database already exists and there are open connections
@@ -69,32 +72,160 @@ async function getDB() {
   });
   return db;
 }
-// MOCK API
+
+//! MOCK API
+//! All this should be handled with a backend.
+
 export const client = {
-  get(url) {
+  async get(url) {
     // API for Verify Me
-    if (url === "user/me") {
+    console.log("GET", url);
+
+    if (url === `user/me`) {
+    } else if (url.includes(`imgs`)) {
+      url = url.split("/");
+      if (url.length > 1) {
+        // * Get user Id
+
+        const userId = parseInt(url[1]);
+
+        // * GET all images
+
+        const db = getDB();
+
+        //* GET User
+
+        const user = await (await db).get(userStoreName, userId);
+
+        // * Filter Images to Current Users
+
+        const images = user.images.map(async e => (await db).get(imgStore, e));
+
+        return Promise.all(images);
+      } else {
+        // * GET All Images of All Users - Admin
+
+        const db = getDB();
+
+        return (await db).getAll(imgStore);
+      }
+    } else if (url.includes(`img`)) {
+      url = url.split("/");
+
+      const imageId = parseInt(url[1]);
+
+      // * GET all images
+
+      const db = getDB();
+
+      //* GET User
+
+      return (await db).get(imgStore, imageId);
+      //   const db = getDB();
+      //   return (await db).get(imgStore, parseInt(url[1]));
+    } else if (url === `users`) {
+      const db = getDB();
+      const users = await (await db).getAll(userStoreName);
+
+      //! Needs Refactor
+      //! Very Expensive
+      users.forEach(user => {
+        client
+          .get(`imgs/${user.id}`)
+          .then(images => {
+            user.images = images.map(image => {
+              return {
+                ...image,
+                url: URL.createObjectURL(image.blob)
+              };
+            });
+          })
+          .catch(e => console.log(e));
+      });
+      return users;
+      //! Time Drain
+      // let users = await (await db).getAll(userStoreName);
+      // users = users.map(async user => {
+      //   return {
+      //     ...user,
+      //     images: await user.images.map(async imageId => {
+      //       return await (await db).get(imgStore, imageId);
+      //     })
+      //   };
+      // });
+      // return users;
     }
   },
 
   async post(url, payload) {
+    // API POST
+
+    console.log("POST", url, payload);
+
     // API for User Registration
+
     if (url === `user/register?signin=${payload.signIn}`) {
+      // User Registration
+
       const db = getDB();
+
       // TODO : Need to hash Password before saving to DB.
+
       return (await db).put(userStoreName, payload);
+      // END
+    } else if (url === `user/login`) {
       // API for User Login
-    } else if (`user/login`) {
+
       const db = getDB();
+
       // TODO:  Verify Login Password
+
       return (await db).getFromIndex(userStoreName, emailIndex, payload.email);
+
+      // END
+    } else if (url === "img") {
+      // API for new Image
+      const db = getDB();
+
+      return (await db).put(imgStore, payload);
+      // END
+    } else if (url === `img/${payload.id}`) {
+      // API for Updating Image
+      const db = getDB();
+
+      return (await db).put(imgStore, payload, payload.id);
+
+      // END
+    } else if (url === `user/img/${payload.imageId}`) {
+      // Update Users Images
+      const db = getDB();
+      // Returns the updated User with Images
+      return (await db)
+        .getFromIndex(userStoreName, emailIndex, payload.user)
+        .then(async user => {
+          user.images = user.images || [];
+          user.images.push(payload.imageId);
+
+          (await db).put(userStoreName, user);
+          return user;
+        });
+
+      // END
     }
+
     // TODO : API for Images
     // TODO : POST to DB.
     // TODO : GET from DB
     // TODO : GET ALL
     // TODO : Update via User
     // TODO : Update via Admin
+  },
+  async delete(url) {
+    url = url.split("/");
+    if (url[0] === `img`) {
+      const db = getDB();
+      return (await db).delete(imgStore, parseInt(url[1]));
+    }
   }
 };
 // IIFE to add Mock Admin User
