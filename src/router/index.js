@@ -25,23 +25,24 @@ const routes = [
     component: () => import("../views/Dashboard.vue")
   },
   {
+    path: "/img/:id",
+    name: "Image Detail",
+    component: () => import("../components/ImageDetails.vue")
+  },
+  {
     path: "/signup",
     name: "Sign Up",
 
     component: () => import("../views/SignUp.vue")
   },
   {
-    path: "/admin/id",
+    path: "/admin",
+    name: "Admin",
     meta: {
       requiresAuth: true
       // * requiresAdmin: true
     },
     component: () => import("../views/Admin.vue")
-  },
-  {
-    path: "/img/:id",
-    Name: "Image Detail",
-    component: () => import("../components/ImageDetails.vue")
   },
   {
     path: "*", // * For any other route redirect to Login Page
