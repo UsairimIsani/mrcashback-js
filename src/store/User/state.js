@@ -1,10 +1,12 @@
 // * User State
 export default {
   user: {
-    email: "",
+    email: "test@mrcashback.com",
     token: "",
-    verified: false,
-    admin: false
+    verified: true,
+    admin: true,
+    images: [],
+    id: 2
   },
   err: false,
   errObject: {}

@@ -3,8 +3,25 @@
     <div>
       <vs-navbar style="height:100%;">
         <div slot="title">
-          <vs-navbar-title>{{$route.name}}</vs-navbar-title>
+          <vs-navbar-title>
+            <router-link to="/">
+              <img src="@/assets/logo.svg" alt />
+            </router-link>
+            {{$route.name}}
+          </vs-navbar-title>
         </div>
+        <vs-navbar-item index="0">
+          <router-link
+            class="home-link"
+            v-if="$route.path !== '/dashboard' && $route.path !=='/login'&& $route.path !=='/signup'"
+            to="/dashboard"
+          >Dashboard</router-link>
+        </vs-navbar-item>
+        <vs-navbar-item index="2">
+          <router-link to="/login" v-if="$route.path !=='/login'&& $route.path !=='/signup'">
+            <vs-icon icon="exit_to_app"></vs-icon>
+          </router-link>
+        </vs-navbar-item>
       </vs-navbar>
     </div>
     <div class="router-view">
@@ -32,9 +49,16 @@ body {
 .vs-navbar--header {
   padding: 1em;
   & h3 {
-    font-size: 2.2em;
+    & img {
+      margin: 0 0.5em;
+      width: 2em;
+    }
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
   }
 }
+
 .router-view {
   height: 90vh;
   padding: 1em;
@@ -63,8 +87,11 @@ body {
   max-width: 500px;
   width: auto;
 }
-.remeber-me {
-  align-self: flex-start;
-  margin: 2% 0;
+
+.default-img-size {
+  min-width: 200px;
+  max-width: 500px;
+  min-height: 200px;
+  height: auto;
 }
 </style>
