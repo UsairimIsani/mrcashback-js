@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Picture Gallery -->
-    <vs-images v-if="images">
+    <vs-images v-if="images" alternating>
       <vs-image
         class="images"
         :key="index"
@@ -15,32 +15,46 @@
   </div>
 </template>
 <script>
+// import { mapActions, mapState } from "vuex";
+// import ACTION_CONSTANTS from "../store/ACTION_CONSTANTS";
 export default {
+  props: ["images"],
   data() {
-    return {
-      images: null, // *  List of images
-    };
+    return {};
   },
   methods: {
     // * Opens image of specific ID in Images View
     openImage(e) {
-      this.$router.push(`img/${e.id}`);
+      this.$router.push(`/img/${e.id}`);
     },
   },
   mounted() {
-    // * Placeholder Images to test Async Behaviour
-    setTimeout(() => {
-      // * Create a new Array of length 10
-      // * Map each element of empty array to image with metadata.
-      this.images = Array.from(new Array(10)).map((_, index) => {
-        return {
-          url: `https://picsum.photos/400/400?image=2${index}`,
-          id: index,
-        };
-      });
-      // * Timeout to Simulate Async Behaviour
-    }, 0);
+    // * Make Dum
+    // if (this.$props.userId) {
+    //   this[ACTION_CONSTANTS.GET_ALL_USER_IMAGES](this.$props.userId);
+    // } else {
+    //   this[ACTION_CONSTANTS.GET_ALL_USER_IMAGES](this.user.id);
+    // }
+    //  // * Placeholder Images to test Async Behavior
+    //   setTimeout(() => {
+    //     // * Create a new Array of length 10
+    //     // * Map each element of empty array to image with metadata.
+    //     this.images = Array.from(new Array(10)).map((_, index) => {
+    //       return {
+    //         url: `https://picsum.photos/400/400?image=2${index}`,
+    //         id: index,
+    //       };
+    //     });
+    //     // * Timeout to Simulate Async Behavior
+    //   }, 0);
   },
+  // computed: mapState({
+  //   user: (state) => state.User.user,
+  //   images: (state) =>
+  //     state.Gallery.images.map((img) => {
+  //       return { ...img, url: URL.createObjectURL(img.blob) };
+  //     }) || [],
+  // }),
 };
 </script>
 <style lang="scss" scoped>

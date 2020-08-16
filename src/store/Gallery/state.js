@@ -1,3 +1,5 @@
 export default {
-  images: []
+  images: [],
+  err: {},
+  image: {}
 };

@@ -1,1 +1,11 @@
-export default {};
+export default {
+  userImages(state) {
+    if (state?.images?.length > 0) {
+      return (
+        state.images.map(img => {
+          return { ...img, url: URL.createObjectURL(img.blob) };
+        }) || []
+      );
+    }
+  }
+};

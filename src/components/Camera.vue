@@ -7,52 +7,88 @@
     </div>
     <div>
       <!-- After Taking a Picture. Preview of Picture -->
-      <img v-if="imageSrc" :src="imageSrc" alt />
+      <img v-if="imageSrc" :src="imageSrc" alt class="default-img-size" />
       <!-- Before Taking a Picture. Placeholder Image -->
-      <img v-else height="480px" width="640px" src="@/assets/no-image.svg" />
+      <img v-else width="640px" height="480px" src="@/assets/no-image.svg" />
     </div>
   </div>
 </template>
 <script>
+import { mapActions } from "vuex";
+import ACTION_CONSTANTS from "../store/ACTION_CONSTANTS";
 export default {
   data() {
     return {
       videoSrc: null, // * Live video feed from camera.
       imageSrc: null, // * Picture Preview Source.
+      image: {
+        name: "Unnamed",
+        blob: null,
+        createdAt: null,
+        updatedAt: null,
+      },
     };
   },
-  mounted() {
+  async mounted() {
     // * Browser API to access Media Devices i.e Camera
-    navigator.mediaDevices
-      // * Media Device Constraints i.e Video and/or Audio, from device
-      // * Using Media Devices requires User's permission.
-      .getUserMedia({
-        video: true,
-      })
-      .then((e) => {
-        // * Setting Camera feed to Video feed.
-        this.videoSrc = e;
+    try {
+      this.videoSrc = await navigator.mediaDevices
+
+        // * Media Device Constraints i.e Video and/or Audio, from device
+        // * Using Media Devices requires User's permission.
+
+        .getUserMedia({
+          video: true,
+        });
+    } catch (error) {
+      this.$vs.notify({
+        title: "Camera can't be accessed.",
+        text: error.message,
+        color: "danger",
+        position: "top-right",
       });
+    }
   },
   destroyed() {
     // * Close Camera
     // * Stops Camera feed and frees camera for other Application use.
-    this.videoSrc.getVideoTracks().forEach((e) => {
-      e.stop();
-    });
+
+    this.videoSrc.getVideoTracks().forEach((e) => e.stop());
   },
+
+  // * Component Methods
+
   methods: {
+    // * Map Action to Methods
+
+    ...mapActions([ACTION_CONSTANTS.ADD_IMAGE]),
+
     // * Takes picture from the current Camera feed.
-    takePicture(e) {
+
+    async takePicture(e) {
       // * Takes Video feed and saves a frame as an ImageCapture Blob(Binary Format).
-      new ImageCapture(this.videoSrc.getVideoTracks()[0])
-        .takePhoto()
-        .then((e) => {
-          // * Creates  URL for the blob
-          const imageUrl = URL.createObjectURL(e);
-          // * Sets image source to URL of taken Photo.
-          this.imageSrc = imageUrl;
-        });
+
+      const image = await new ImageCapture(
+        this.videoSrc.getVideoTracks()[0]
+      ).takePhoto();
+
+      // * Creates  URL for the blob
+
+      const imageUrl = URL.createObjectURL(image);
+
+      // * Sets image source to URL of taken Photo.
+
+      this.imageSrc = imageUrl;
+
+      // * Create Image in DB
+
+      // this.image.blob = new Blob([image], { type: image.type });
+      this.image.blob = image;
+      this.image.createdAt = new Date();
+      this.image.updatedAt = new Date();
+
+      // * Dispatch ADD Image
+      this[ACTION_CONSTANTS.ADD_IMAGE](this.image);
     },
   },
 };
@@ -68,6 +104,7 @@ button {
 .camera-container {
   display: flex;
   justify-content: space-around;
+  flex-wrap: wrap;
   & div {
     margin: 1em;
   }
@@ -76,7 +113,7 @@ button {
   position: relative;
 }
 
-// *  Camera Button to takes Photos
+// *  Camera Button to take Photos
 .video-container::after {
   content: "";
   display: block;
