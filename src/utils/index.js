@@ -238,6 +238,12 @@ export const client = {
     // TODO : Update via User
     // TODO : Update via Admin
   },
+  async put(url, payload) {
+    if (url === `img/${payload.id}`) {
+      const db = getDB();
+      return (await db).put(imgStore, payload);
+    }
+  },
   async delete(url) {
     url = url.split("/");
     if (url[0] === `img`) {

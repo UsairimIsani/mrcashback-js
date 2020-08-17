@@ -1,5 +1,5 @@
 export default {
   images: [],
   err: {},
-  image: {}
+  image: { name: "", description: "", tags: [] }
 };

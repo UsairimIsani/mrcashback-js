@@ -17,6 +17,7 @@
 <script>
 // import { mapActions, mapState } from "vuex";
 // import ACTION_CONSTANTS from "../store/ACTION_CONSTANTS";
+import vue from "../main";
 export default {
   props: ["images"],
   data() {
@@ -25,7 +26,8 @@ export default {
   methods: {
     // * Opens image of specific ID in Images View
     openImage(e) {
-      this.$router.push(`/img/${e.id}`);
+      // ? Cannot Find this.$router ?
+      vue.$router.push(`/img/${e.id}`);
     },
   },
   mounted() {

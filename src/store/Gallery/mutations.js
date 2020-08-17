@@ -18,5 +18,11 @@ export default {
   },
   [ACTION_CONSTANTS.GET_IMAGE_FAILED](state, payload) {
     state.err = payload;
+  },
+  [ACTION_CONSTANTS.UPDATE_IMAGE](state, payload) {
+    state.image = payload;
+  },
+  [ACTION_CONSTANTS.UPDATE_IMAGE_FAILED](state, payload) {
+    state.err = payload;
   }
 };
