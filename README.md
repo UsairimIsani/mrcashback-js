@@ -2,6 +2,10 @@
 
 Live Demo [MRCAHSBACK](https://mrcashback-js.vercel.app/)
 
+### Admin User Credentials
+Email :  admin@mrcashback.com
+Password : !Mrcashback123
+
 ## Probation Project
 
 ## Probation Duration 4 Days
