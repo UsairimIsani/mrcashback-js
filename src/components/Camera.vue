@@ -2,8 +2,11 @@
   <!-- Camera -->
   <div class="camera-container">
     <!-- Live feed from Camera. To View one self before taking a picture -->
-    <div class="video-container" @click="takePicture">
+    <div v-if="!device" class="video-container" @click="takePicture">
       <video :src-object.prop.camel="videoSrc" autoplay></video>
+    </div>
+    <div v-else>
+      <img width="400px" height="400px" src="@/assets/camera.svg" @click="takeImage" />
     </div>
     <div>
       <!-- After Taking a Picture. Preview of Picture -->
@@ -27,26 +30,35 @@ export default {
         createdAt: null,
         updatedAt: null,
       },
+      device: false,
     };
   },
   async mounted() {
+    // document.addEventListener("deviceready", onDeviceReady, false);
+    // function onDeviceReady() {
+    //   this.device = this.$device.android
+    //   console.log(navigator.camera);
+    // }
+    this.device = this.$device.android;
     // * Browser API to access Media Devices i.e Camera
-    try {
-      this.videoSrc = await navigator.mediaDevices
+    if (!this.device) {
+      try {
+        this.videoSrc = await navigator.mediaDevices
 
-        // * Media Device Constraints i.e Video and/or Audio, from device
-        // * Using Media Devices requires User's permission.
+          // * Media Device Constraints i.e Video and/or Audio, from device
+          // * Using Media Devices requires User's permission.
 
-        .getUserMedia({
-          video: true,
+          .getUserMedia({
+            video: true,
+          });
+      } catch (error) {
+        this.$vs.notify({
+          title: "Camera can't be accessed.",
+          text: error.message,
+          color: "danger",
+          position: "top-right",
         });
-    } catch (error) {
-      this.$vs.notify({
-        title: "Camera can't be accessed.",
-        text: error.message,
-        color: "danger",
-        position: "top-right",
-      });
+      }
     }
   },
   destroyed() {
@@ -63,7 +75,7 @@ export default {
 
     ...mapActions([ACTION_CONSTANTS.ADD_IMAGE]),
 
-    // * Takes picture from the current Camera feed.
+    // * Takes picture from the current Camera feed - WEB
 
     async takePicture(e) {
       // * Takes Video feed and saves a frame as an ImageCapture Blob(Binary Format).
@@ -89,6 +101,27 @@ export default {
 
       // * Dispatch ADD Image
       this[ACTION_CONSTANTS.ADD_IMAGE](this.image);
+    },
+    takeImage() {
+      navigator.camera.getPicture(
+        (cameraSuccess) => {
+          this.image.url = cameraSuccess.destinationType;
+          this.image.createdAt = new Date();
+          this.image.updatedAt = new Date();
+
+          // * Dispatch ADD Image
+          this[ACTION_CONSTANTS.ADD_IMAGE](this.image);
+        },
+        (cameraError) => {
+          this.$vs.notify({
+            title: "Camera Error",
+            text: cameraError.message,
+            color: "danger",
+            position: "top-right",
+          });
+        },
+        {}
+      );
     },
   },
 };

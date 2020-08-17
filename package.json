@@ -29,6 +29,7 @@
     "idb": "^5.0.4",
     "material-icons": "^0.3.1",
     "vue": "^2.6.11",
+    "vue-device-detector": "^1.1.5",
     "vue-router": "^3.2.0",
     "vuesax": "^3.11.17",
     "vuex": "^3.4.0"
